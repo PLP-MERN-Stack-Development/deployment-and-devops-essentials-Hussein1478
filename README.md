@@ -1,77 +1,237 @@
-# Deployment and DevOps for MERN Applications
+# 🚀 Real-Time Chat Application (Socket.io, MERN)
 
-This assignment focuses on deploying a full MERN stack application to production, implementing CI/CD pipelines, and setting up monitoring for your application.
+This project is a **full-stack real-time chat application** built using:
 
-## Assignment Overview
+* **React + Vite** (Frontend)
+* **Node.js + Express + MongoDB** (Backend)
+* **Socket.io** for real-time communication
+* **Render** for backend deployment
+* **Vercel** for frontend deployment
+* **GitHub Actions** for automated CI/CD
 
-You will:
-1. Prepare your MERN application for production deployment
-2. Deploy the backend to a cloud platform
-3. Deploy the frontend to a static hosting service
-4. Set up CI/CD pipelines with GitHub Actions
-5. Implement monitoring and maintenance strategies
+---
 
-## Getting Started
+## 📌 Live URLs
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Follow the setup instructions in the `Week7-Assignment.md` file
-4. Use the provided templates and configuration files as a starting point
+| Service               | URL                                                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------ |
+| **Frontend (Vercel)** | [https://socketio-chat-app-kappa.vercel.app/](https://socketio-chat-app-kappa.vercel.app/) |
+| **Backend (Render)**  | [https://chart-xxyc.onrender.com](https://chart-xxyc.onrender.com)                         |
 
-## Files Included
+---
 
-- `Week7-Assignment.md`: Detailed assignment instructions
-- `.github/workflows/`: GitHub Actions workflow templates
-- `deployment/`: Deployment configuration files and scripts
-- `.env.example`: Example environment variable templates
-- `monitoring/`: Monitoring configuration examples
+## 📁 Project Structure
 
-## Requirements
+```
+socketio-chat/
+├── client/                 # React front-end
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── hooks/
+│   │   ├── pages/
+│   │   ├── socket/
+│   │   └── App.jsx
+│   └── package.json
+│
+├── server/                 # Node.js back-end
+│   ├── config/
+│   ├── controllers/
+│   ├── models/
+│   ├── socket/
+│   ├── utils/
+│   ├── server.js
+│   └── package.json
+│
+└── README.md
+```
 
-- A completed MERN stack application from previous weeks
-- Accounts on the following services:
-  - GitHub
-  - MongoDB Atlas
-  - Render, Railway, or Heroku (for backend)
-  - Vercel, Netlify, or GitHub Pages (for frontend)
-- Basic understanding of CI/CD concepts
+---
 
-## Deployment Platforms
+# ✅ 1. Deployment Tasks Completed
 
-### Backend Deployment Options
-- **Render**: Easy to use, free tier available
-- **Railway**: Developer-friendly, generous free tier
-- **Heroku**: Well-established, extensive documentation
+### **Frontend Deployment (Vercel)**
 
-### Frontend Deployment Options
-- **Vercel**: Optimized for React apps, easy integration
-- **Netlify**: Great for static sites, good CI/CD
-- **GitHub Pages**: Free, integrated with GitHub
+* Built with **Vite + React**
+* Connected to GitHub for automatic deployments
+* Environment variables added via Vercel Dashboard
+* Production URL generated automatically
 
-## CI/CD Pipeline
+### **Backend Deployment (Render)**
 
-The assignment includes templates for setting up GitHub Actions workflows:
-- `frontend-ci.yml`: Tests and builds the React application
-- `backend-ci.yml`: Tests the Express.js backend
-- `frontend-cd.yml`: Deploys the frontend to your chosen platform
-- `backend-cd.yml`: Deploys the backend to your chosen platform
+* Render **Web Service**
+* Auto-deploy from GitHub repository
+* `.env` variables configured in Render Dashboard
+* MongoDB connected using **MongoDB Atlas URI**
+* Live server URL configured for CORS and Socket.io
 
-## Submission
+---
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+# ⚙️ 2. CI/CD Pipeline With GitHub Actions
 
-1. Complete all deployment tasks
-2. Set up CI/CD pipelines with GitHub Actions
-3. Deploy both frontend and backend to production
-4. Document your deployment process in the README.md
-5. Include screenshots of your CI/CD pipeline in action
-6. Add URLs to your deployed applications
+A **full CI/CD pipeline** was created using GitHub Actions to:
 
-## Resources
+✔️ Install dependencies
+✔️ Run build steps
+✔️ Test the code (optional)
+✔️ Deploy frontend to **Vercel**
+✔️ Deploy backend to **Render**
 
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [MongoDB Atlas Documentation](https://docs.atlas.mongodb.com/)
-- [Render Documentation](https://render.com/docs)
-- [Railway Documentation](https://docs.railway.app/)
-- [Vercel Documentation](https://vercel.com/docs)
-- [Netlify Documentation](https://docs.netlify.com/) 
+### **.github/workflows/deploy.yml**
+
+```yaml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build client
+        run: |
+          cd client
+          npm install
+          npm run build
+
+      - name: Deploy Frontend to Vercel
+        run: |
+          npm i -g vercel
+          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Backend to Render
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+```
+
+---
+
+# 🚀 3. Deployment to Production
+
+### **Frontend (Vercel)**
+
+✔ Linked to GitHub
+✔ Auto builds on push to `main`
+✔ Production preview for each commit
+✔ Global CDN
+
+### **Backend (Render)**
+
+✔ Auto deploys from `main`
+✔ Node version & start command configured
+✔ Environment variables secure
+✔ Deployed as Web Service
+✔ Health checks enabled
+
+---
+
+# 📝 4. Documentation of Deployment Process
+
+### **Step 1 – Push Code to GitHub**
+
+All code from backend+frontend was pushed to a unified repo.
+
+### **Step 2 – Deploy Backend on Render**
+
+* Created **Web Service**
+* Linked to GitHub repo
+* Set build command: `npm install`
+* Set start command: `node server.js`
+* Added environment variables (`PORT`, `MONGO_URI`, etc.)
+* Enabled *Auto Deploy*
+
+### **Step 3 – Deploy Frontend on Vercel**
+
+* Imported GitHub repo into Vercel
+* Build command: `npm run build`
+* Output directory: `dist`
+* Added environment variables (API URL)
+* Deployed with CI/CD integration
+
+### **Step 4 – Enabled CI/CD with GitHub Actions**
+
+* Added workflow file under `.github/workflows/`
+* Connected Vercel token → GitHub Secrets
+* Added Render deploy hook → GitHub Secrets
+
+### **Step 5 – Verified Production**
+
+* Confirmed backend is online
+* Confirmed frontend points to correct backend URL
+* Confirmed sockets work (real-time chat, presence, notifications)
+
+---
+
+```md
+### CI/CD Pipeline Running
+![Pipeline](cicd.png)
+```
+
+---
+
+# 🌍 6. Final Deployed URLs
+
+### **Frontend App (Vercel)**
+
+🔗 [https://socketio-chat-app-kappa.vercel.app/](https://socketio-chat-app-kappa.vercel.app/)
+
+### **Backend API (Render)**
+
+🔗 [https://chart-xxyc.onrender.com](https://chart-xxyc.onrender.com)
+
+---
+
+# 🛠 Technologies Used
+
+| Layer         | Tech                                 |
+| ------------- | ------------------------------------ |
+| Frontend      | React, Vite, Context API, Socket.io  |
+| Backend       | Node.js, Express, MongoDB, Socket.io |
+| DevOps        | Render, Vercel, GitHub Actions       |
+| Communication | WebSockets                           |
+
+---
+
+# 📦 Installation (Local Development)
+
+```
+git clone <your_repo_url>
+cd socketio-chat
+
+# install client
+cd client
+npm install
+npm run dev
+
+# install server
+cd ../server
+npm install
+npm run dev
+```
+
+---
+
+# 🤝 Contributing
+
+Pull requests are welcome!
+Please open an issue first for discussion.
+
+---
+
+
